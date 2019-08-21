@@ -496,7 +496,6 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
- dotspacemacs/user-config' first."
   ;; (setq tramp-ssh-controlmaster-options
   ;;       "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
   (setq configuration-layer-elpa-archives
