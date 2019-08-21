@@ -30,48 +30,15 @@ This function should only modify configuration layer settings."
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
+
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     protobuf
-     javascript
-     ;; ocaml
-     yaml
-     windows-scripts
-     html
-     ;; for python auto-complete need to install jedi<0.9 in your home/emacs.d/
-     ;;     .cache/anaconda-mode/
-     (python :variables python-backend 'lsp)
-
-     ;; c / c++ mode support
-     ;; (c-c++ :variables
-     ;; enable clang support
-     ;; c-c++-enable-clang-support t
-     ;; default mode for c-c++ header files
-     ;; c-c++-default-mode-for-headers 'c++-mode
-     ;; )
-     ;; ycmd
-     (c-c++ :variables
-            c-c++-backend 'lsp-cquery)
-     lsp
-     dap
-     (plantuml :variables
-               plantuml-jar-path "~/.spacemacs.d/tools/plantuml.jar"
-               plantuml-default-exec-mode 'jar
-               org-plantuml-jar-path "~/.spacemacs.d/tools/plantuml.jar")
-     (java :variables java-backend 'lsp)
-
-     ;; gtags
-     ;; for functions in python lisp and c / c++
-     semantic
-     ;; cscope for code navigation
-     ;; cscope
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     helm
      (auto-completion :variables
                       ;; auto-completion-enable-help-tooltip t
                       ;; auto-completion-enable-sort-by-usage t
@@ -84,25 +51,58 @@ This function should only modify configuration layer settings."
                       ;; auto-completion-private-snippets-directory nil
                       )
      emacs-lisp
-     ;; haskell
+     git
+     helm
      markdown
+     multiple-cursors
      (org :variables
           org-enable-github-support t
           org-enable-bootstrap-support t
           org-enable-org-journal-support t)
      (shell :variables
-            shell-default-shell 'eshell
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'bottom
+	    shell-default-shell 'eshell)
 
      spell-checking
      syntax-checking
-     git
-     graphviz
-
-     imenu-list
+     treemacs
      version-control
+
+     ;; ----------------------------------------------------------------
+     ;; Additional layer settings
+     ;; ----------------------------------------------------------------
+
+     ;; --------------- digraph for orgmode --------------------------------
+     graphviz
+     (plantuml :variables
+               plantuml-jar-path "~/.spacemacs.d/tools/plantuml.jar"
+               plantuml-default-exec-mode 'jar
+               org-plantuml-jar-path "~/.spacemacs.d/tools/plantuml.jar")
+     ;; ----------------------------------------------------------------
+
+     ;; --------------- language support -------------------------------
      chinese
+     protobuf
+     javascript
+     yaml
+     windows-scripts
+     html
+     (java :variables java-backend 'lsp)
+     (python :variables python-backend 'lsp)
+     ;; ycmd
+     (c-c++ :variables
+            c-c++-backend 'lsp-cquery)
+     ;; ----------------------------------------------------------------
+
+     ;; ---------------- additional layer for language -----------------
+     imenu-list
+     lsp
+     ;; dap
+     ;; gtags
+     ;; for functions in python lisp and c / c++
+     semantic
+     ;; ----------------------------------------------------------------
      )
 
    ;; List of additional packages that will be installed without being
@@ -163,6 +163,7 @@ It should only modify the values of Spacemacs settings."
    ;; `--insecure' which forces the value of this variable to nil.
    ;; (default t)
    dotspacemacs-elpa-https nil
+
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
    dotspacemacs-elpa-timeout 5
@@ -208,6 +209,7 @@ It should only modify the values of Spacemacs settings."
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner 'random
+
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -386,6 +388,7 @@ It should only modify the values of Spacemacs settings."
    ;; scrolling overrides the default behavior of Emacs which recenters point
    ;; when it reaches the top or bottom of the screen. (default t)
    dotspacemacs-smooth-scrolling nil
+
    ;; Control line numbers activation.
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
    ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
@@ -405,6 +408,7 @@ It should only modify the values of Spacemacs settings."
    ;; When used in a plist, `visual' takes precedence over `relative'.
    ;; (default nil)
    dotspacemacs-line-numbers `relative
+
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
@@ -496,33 +500,15 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  ;; (setq tramp-ssh-controlmaster-options
-  ;;       "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
   (setq configuration-layer-elpa-archives
         '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
           ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
           ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
-  ;; spell check dictionary
-  (ispell-change-dictionary "american" t)
   ;; fci mode show character at line 80
   (add-hook 'prog-mode-hook 'turn-on-fci-mode)
   (add-hook 'text-mode-hook 'turn-on-fci-mode)
   (setq fci-always-use-textual-rule t)
-  ;; (setq fci-rule-character 124)
-  ;; (add-hook 'prog-mode-hook 'imenu-list-minor-mode)
 
-  ;; settings for ycmd layer
-  ;; (setq ycmd-force-semantic-completion t)
-  ;; (setq ycmd-startup-timeout 10)
-  ;; (set-variable 'ycmd-server-command `("python" ,(file-truename "~/ycmd/ycmd/")))
-  ;; (set-variable 'ycmd-global-config (file-truename "~/ycmd/.ycm_extra_conf.py"))
-
-  (setq org-journal-dir "~/org/journal/")
-  ;; (setq org-journal-file-format "%y-%m-%d")
-  ;; (setq org-journal-date-prefix "#+TITLE: ")
-  ;; (setq org-journal-date-format "%A, %B %d %Y")
-  ;; (setq org-journal-time-prefix "* ")
-  ;; (setq org-journal-time-format "")
   (with-eval-after-load 'org
     (org-babel-do-load-languages 'org-babel-load-languages '(
                                                              (dot . t)
@@ -530,8 +516,12 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
                                                              (python . t)
                                                              ))
     (setq org-confirm-babel-evaluate nil)
-    (spacemacs//set-monospaced-font "Source Code Pro" "Source Han Sans SC" 13 16)
-    )
+    ;; org-table align for Chinese and English characters
+    (spacemacs//set-monospaced-font
+     "Source Code Pro"
+     "Source Han Sans SC"
+     13
+     16))
   ;; It is required to disable `fci-mode' when `htmlize-buffer' is called;
   ;; otherwise the invisible fci characters show up as funky looking
   ;; visible characters in the source code blocks in the html file.
@@ -580,34 +570,27 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-
+  ;; set org-journal directory
+  (setq org-journal-dir "~/org/journal/")
+  ;; spell check dictionary
+  (ispell-change-dictionary "american" t)
   ;; remove semantic at emacs-lisp mode to fix freeze
   (remove-hook 'emacs-lisp-mode-hook 'semantic-mode)
   ;; show indent guide
   ;; (indent-guide-global-mode)
-  ;; bind clang-format region to C-M-tab in all modes:
-  ;; (global-set-key [C-M-tab] 'clang-fromat-region)
-  ;; bing clang-format-buffer to tab on the c++=mode only:
-  ;; (add-hook 'c++-mode-hook 'clang-format-bindings)
-  ;; (add-hook 'c-mode-hook 'clang-format-bindings)
-  ;; (defun clang-format-bindings ()
-  ;;   (define-key c++-mode-map [tab] 'clang-format-buffer)
-  ;;   (define-key c-mode-map [tab] 'clang-format-buffer))
-  (setq c-default-style '((c-mode ."linux")
-                          (c++-mode ."linux")))
+  ;; do not create lock files while editing
   (setq create-lockfiles nil)
-  ;; set tab width as 8
-  (setq-default default-tab-width 8)
-  ;; (setq-default indent-tabs-mode t)
-  ;; show tab and white space as character
+  ;; display time on mode-line
   (display-time-mode 1)
+  ;; show tab and white space as character
   (spacemacs/toggle-whitespace-globally-on)
+  ;; agenda file or dictionary
   (setq org-agenda-files (quote
-        ("~/org/notes.org" "~/org/journal.org" "~/org/project")))
+        ("~/org" "~/org/journal" "~/org/project")))
+  ;; pyim default dictionary
   (setq pyim-dicts
         (quote
          ((:name "default" :file "~/.spacemacs.d/tools/pyim-bigdict.pyim.gz"))))
-
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
