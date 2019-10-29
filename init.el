@@ -58,6 +58,7 @@ This function should only modify configuration layer settings."
      (org :variables
           org-enable-github-support t
           org-enable-bootstrap-support t
+          org-want-todo-bindings t
           org-enable-org-journal-support t)
      (shell :variables
             shell-default-height 30
@@ -91,8 +92,10 @@ This function should only modify configuration layer settings."
      (java :variables java-backend 'lsp)
      (python :variables python-backend 'lsp)
      ;; ycmd
-     (c-c++ :variables
-            c-c++-backend 'lsp-cquery)
+     ;; (c-c++ :variables
+     ;;        c-c++-backend 'lsp-cquery
+     ;;        c-c++-lsp-executable (file-truename "~/cquery/build/release/bin/cquery"))
+     c-c++
      ;; ----------------------------------------------------------------
 
      ;; ---------------- additional layer for language -----------------
