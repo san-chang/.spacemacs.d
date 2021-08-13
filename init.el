@@ -587,10 +587,6 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
         '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
           ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
           ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
-  ;; fci mode show character at line 80
-  ;; (add-hook 'prog-mode-hook 'turn-on-fci-mode)
-  ;; (add-hook 'text-mode-hook 'turn-on-fci-mode)
-  (setq fci-always-use-textual-rule t)
 
   (with-eval-after-load 'org
     (org-babel-do-load-languages 'org-babel-load-languages '(
@@ -605,39 +601,23 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
      "Source Han Sans SC"
      13
      16))
-  ;; It is required to disable `fci-mode' when `htmlize-buffer' is called;
-  ;; otherwise the invisible fci characters show up as funky looking
-  ;; visible characters in the source code blocks in the html file.
-  ;; http://lists.gnu.org/archive/html/emacs-orgmode/2014-09/msg00777.html
-  (with-eval-after-load 'fill-column-indicator
-    (defvar modi/htmlize-initial-fci-state nil
-      "Variable to store the state of `fci-mode' when `htmlize-buffer' is called.")
-    (defun modi/htmlize-before-hook-fci-disable ()
-      (setq modi/htmlize-initial-fci-state fci-mode)
-      (when fci-mode
-        (fci-mode -1)))
-    (defun modi/htmlize-after-hook-fci-enable-maybe ()
-      (when modi/htmlize-initial-fci-state
-        (fci-mode 1)))
-    (add-hook 'htmlize-before-hook #'modi/htmlize-before-hook-fci-disable)
-    (add-hook 'htmlize-after-hook #'modi/htmlize-after-hook-fci-enable-maybe))
 
   ;; `flyspell-mode' also has to be disabled because depending on the
   ;; theme, the squiggly underlines can either show up in the html file
   ;; or cause elisp errors like:
     ;; (wrong-type-argument number-or-marker-p (nil . 100))
-  (with-eval-after-load 'flyspell
-    (defvar modi/htmlize-initial-flyspell-state nil
-      "Variable to store the state of `flyspell-mode' when `htmlize-buffer' is called.")
-    (defun modi/htmlize-before-hook-flyspell-disable ()
-      (setq modi/htmlize-initial-flyspell-state flyspell-mode)
-      (when flyspell-mode
-        (flyspell-mode -1)))
-    (defun modi/htmlize-after-hook-flyspell-enable-maybe ()
-      (when modi/htmlize-initial-flyspell-state
-        (flyspell-mode 1)))
-    (add-hook 'htmlize-before-hook #'modi/htmlize-before-hook-flyspell-disable)
-    (add-hook 'htmlize-after-hook #'modi/htmlize-after-hook-flyspell-enable-maybe))
+  ;; (with-eval-after-load 'flyspell
+  ;;   (defvar modi/htmlize-initial-flyspell-state nil
+  ;;     "Variable to store the state of `flyspell-mode' when `htmlize-buffer' is called.")
+  ;;   (defun modi/htmlize-before-hook-flyspell-disable ()
+  ;;     (setq modi/htmlize-initial-flyspell-state flyspell-mode)
+  ;;     (when flyspell-mode
+  ;;       (flyspell-mode -1)))
+  ;;   (defun modi/htmlize-after-hook-flyspell-enable-maybe ()
+  ;;     (when modi/htmlize-initial-flyspell-state
+  ;;       (flyspell-mode 1)))
+  ;;   (add-hook 'htmlize-before-hook #'modi/htmlize-before-hook-flyspell-disable)
+  ;;   (add-hook 'htmlize-after-hook #'modi/htmlize-after-hook-flyspell-enable-maybe))
   )
 
 (defun dotspacemacs/user-load ()
@@ -653,29 +633,44 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  ;; set org-journal directory
-  (setq org-journal-dir "~/org/journal/")
-  ;; spell check dictionary
-  (ispell-change-dictionary "american" t)
-  ;; remove semantic at emacs-lisp mode to fix freeze
-  (remove-hook 'emacs-lisp-mode-hook 'semantic-mode)
-  ;; show indent guide
-  ;; (indent-guide-global-mode)
-  ;; do not create lock files while editing
-  (setq create-lockfiles nil)
-  ;; display time on mode-line
-  (display-time-mode 1)
-  ;; show tab and white space as character
-  (spacemacs/toggle-whitespace-globally-on)
+  ;; ------------------------ Org Mode Configuration ---------------------------
   ;; agenda file or dictionary
   (setq org-agenda-files (quote
-        ("~/org" "~/org/journal" "~/org/project")))
-  ;; pyim default dictionary
-  (setq pyim-dicts
-        (quote
-         ((:name "default" :file "~/.spacemacs.d/tools/pyim-bigdict.pyim.gz"))))
+                          ("~/org" "~/org/journal" "~/org/project")))
+
+  ;; set org-journal directory
+  (setq org-journal-dir "~/org/journal/")
+
+  ;; set xelatex as latex compiler for better support for Cchinese
   (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
                                 "xelatex -interaction nonstopmode %f"))
+  ;; ---------------------------------------------------------------------------
+
+  ;; spell check dictionary
+  (ispell-change-dictionary "american" t)
+
+  ;; remove semantic at emacs-lisp mode to fix freeze
+  ;; (remove-hook 'emacs-lisp-mode-hook 'semantic-mode)
+
+  ;; show indent guide
+  ;;   Blink after open this config wile jump to line
+  ;; (indent-guide-global-mode)
+
+  ;; do not create lock files while editing
+  (setq create-lockfiles nil)
+
+  ;; display time on mode-line
+  (display-time-mode 1)
+
+  ;; show tab and white space as character
+  (spacemacs/toggle-whitespace-globally-on)
+
+  ;; pyim default dictionary
+  ;; (setq pyim-dicts
+  ;;       (quote
+  ;;        ((:name "default" :file "~/.spacemacs.d/tools/pyim-bigdict.pyim.gz"))))
+
+  ;; Auto Switch input method in Mac
   (use-package sis
     :config
     ;; For MacOS
@@ -714,7 +709,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(pdf-view-restore pdf-tools tablist yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit stickyfunc-enhance srefactor sphinx-doc spaceline-all-the-icons smeargle slim-mode sis shell-pop scss-mode sass-mode rjsx-mode restart-emacs rainbow-delimiters quickrun pytest pyim pyenv-mode py-isort pug-mode protobuf-mode prettier-js powershell popwin poetry plantuml-mode pippel pipenv pip-requirements pcre2el password-generator paradox pangu-spacing ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink open-junk-file omnisharp npm-mode nose nodejs-repl nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc magit-section macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-java lorem-ipsum livid-mode live-py-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide importmagic impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag groovy-mode groovy-imports graphviz-dot-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flx-ido find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotnet dotenv-mode disaster dired-quick-sort diminish define-word cython-mode cpp-auto-include company-ycmd company-web company-rtags company-c-headers company-anaconda column-enforce-mode clean-aindent-mode chinese-conv centered-cursor-mode ccls browse-at-remote bmx-mode blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
+   '(alect-themes pdf-view-restore pdf-tools tablist yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit stickyfunc-enhance srefactor sphinx-doc spaceline-all-the-icons smeargle slim-mode sis shell-pop scss-mode sass-mode rjsx-mode restart-emacs rainbow-delimiters quickrun pytest pyim pyenv-mode py-isort pug-mode protobuf-mode prettier-js powershell popwin poetry plantuml-mode pippel pipenv pip-requirements pcre2el password-generator paradox pangu-spacing ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink open-junk-file omnisharp npm-mode nose nodejs-repl nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc magit-section macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-java lorem-ipsum livid-mode live-py-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide importmagic impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag groovy-mode groovy-imports graphviz-dot-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flx-ido find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotnet dotenv-mode disaster dired-quick-sort diminish define-word cython-mode cpp-auto-include company-ycmd company-web company-rtags company-c-headers company-anaconda column-enforce-mode clean-aindent-mode chinese-conv centered-cursor-mode ccls browse-at-remote bmx-mode blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
