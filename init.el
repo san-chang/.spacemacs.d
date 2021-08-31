@@ -69,7 +69,7 @@ This function should only modify configuration layer settings."
 
      spell-checking
      syntax-checking
-     treemacs
+     ;; treemacs
      version-control
 
      ;; ----------------------------------------------------------------
@@ -636,7 +636,7 @@ before packages are loaded."
   ;; ------------------------ Org Mode Configuration ---------------------------
   ;; agenda file or dictionary
   (setq org-agenda-files (quote
-                          ("~/org" "~/org/journal" "~/org/project")))
+                          ("~/org" "~/org/jorunal" "~/org/project/")))
 
   ;; set org-journal directory
   (setq org-journal-dir "~/org/journal/")
