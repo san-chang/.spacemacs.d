@@ -583,22 +583,23 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (setq configuration-layer-elpa-archives
-        '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-          ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-          ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+  ;; (setq configuration-layer-elpa-archives
+  ;;       '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+  ;;         ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+  ;;         ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
   (with-eval-after-load 'org
     (org-babel-do-load-languages 'org-babel-load-languages '(
                                                              (dot . t)
                                                              (plantuml . t)
-                                                             (python . t)
+                                                             ;; (python . t)
                                                              ))
     (setq org-confirm-babel-evaluate nil)
     ;; org-table align for Chinese and English characters
+    (setq org-adapt-indentation t)
     (spacemacs//set-monospaced-font
      "Source Code Pro"
-     "Source Han Sans SC"
+     "Source Han Sans CN"
      13
      16))
 
@@ -678,7 +679,7 @@ before packages are loaded."
 
      ;; English input source may be: "ABC", "US" or another one.
      ;; "com.apple.keylayout.ABC"
-     "com.apple.keylayout.US"
+     "com.apple.keylayout.ABC"
 
      ;; Other language input source: "rime", "sogou" or another one.
      ;; "im.rime.inputmethod.Squirrel.Rime"
