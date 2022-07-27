@@ -49,14 +49,13 @@ This function should only modify configuration layer settings."
                       ;; auto-completion-complete-with-key-sequence-delay 0.1
                       ;; auto-completion-private-snippets-directory nil
                       )
-     react
+     better-defaults
      emacs-lisp
      git
      helm
+     lsp
      markdown
      multiple-cursors
-     dotnet
-     csharp
      (org :variables
           org-enable-github-support t
           org-enable-bootstrap-support t
@@ -66,28 +65,29 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell)
-
      spell-checking
      syntax-checking
-     ;; treemacs
      version-control
+     ;; treemacs
 
-     ;; ----------------------------------------------------------------
-     ;; Additional layer settings
-     ;; ----------------------------------------------------------------
 
-     ;; --------------- digraph for orgmode --------------------------------
+     ;; --------------- digraph for orgmode ------------------------------------
      graphviz
      (plantuml :variables
                plantuml-jar-path "~/.spacemacs.d/tools/plantuml.jar"
                plantuml-default-exec-mode 'jar
                org-plantuml-jar-path "~/.spacemacs.d/tools/plantuml.jar")
-     ;; ----------------------------------------------------------------
+     ;; ------------------------------------------------------------------------
 
-     ;; --------------- language support -------------------------------
+     ;; --------------- Additional layers --------------------------------------
+     pdf
+
+     ;; --------------- Additional language support ----------------------------
+     react
+     dotnet
+     csharp
      chinese
      protobuf
-     pdf
      javascript
      yaml
      windows-scripts
@@ -99,24 +99,20 @@ This function should only modify configuration layer settings."
      ;;        c-c++-backend 'lsp-cquery
      ;;        c-c++-lsp-executable (file-truename "~/cquery/build/release/bin/cquery"))
      c-c++
-     ;; ----------------------------------------------------------------
-
-     ;; ---------------- additional layer for language -----------------
      imenu-list
-     lsp
      ;; dap
      ;; gtags
      ;; for functions in python lisp and c / c++
      semantic
-     ;; ----------------------------------------------------------------
      )
 
-   ;; List of additional packages that will be installed without being
-   ;; wrapped in a layer. If you need some configuration for these
-   ;; packages, then consider creating a layer. You can also put the
-   ;; configuration in `dotspacemacs/user-config'.
-   ;; To use a local version of a package, use the `:location' property:
-   ;; '(your-package :location "~/path/to/your-package/")
+   ;; List of additional packages that will be installed without being wrapped
+   ;; in a layer (generally the packages are installed only and should still be
+   ;; loaded using load/require/use-package in the user-config section below in
+   ;; this file). If you need some configuration for these packages, then
+   ;; consider creating a layer. You can also put the configuration in
+   ;; `dotspacemacs/user-config'. To use a local version of a package, use the
+   ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       sis
@@ -542,7 +538,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
 
-   ;; Show trailing whitespace (default t)
+   ;; Color highlight trailing whitespace in all prog-mode and text-mode derived
+   ;; modes such as c++-mode, python-mode, emacs-lisp, html-mode, rst-mode etc.
+   ;; (default t)
    dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
@@ -662,7 +660,7 @@ before packages are loaded."
   ;; set org-journal directory
   (setq org-journal-dir "~/org/journal/")
 
-  ;; set xelatex as latex compiler for better support for Cchinese
+  ;; set xelatex as latex compiler for better support of Chinese
   (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
                                 "xelatex -interaction nonstopmode %f"))
   ;; ---------------------------------------------------------------------------
@@ -730,7 +728,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(alect-themes pdf-view-restore pdf-tools tablist yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit stickyfunc-enhance srefactor sphinx-doc spaceline-all-the-icons smeargle slim-mode sis shell-pop scss-mode sass-mode rjsx-mode restart-emacs rainbow-delimiters quickrun pytest pyim pyenv-mode py-isort pug-mode protobuf-mode prettier-js powershell popwin poetry plantuml-mode pippel pipenv pip-requirements pcre2el password-generator paradox pangu-spacing ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink open-junk-file omnisharp npm-mode nose nodejs-repl nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc magit-section macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-java lorem-ipsum livid-mode live-py-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide importmagic impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag groovy-mode groovy-imports graphviz-dot-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flx-ido find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotnet dotenv-mode disaster dired-quick-sort diminish define-word cython-mode cpp-auto-include company-ycmd company-web company-rtags company-c-headers company-anaconda column-enforce-mode clean-aindent-mode chinese-conv centered-cursor-mode ccls browse-at-remote bmx-mode blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-pinyin ace-link ace-jump-helm-line ac-ispell))
+   '(mwim unfill alect-themes pdf-view-restore pdf-tools tablist yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit stickyfunc-enhance srefactor sphinx-doc spaceline-all-the-icons smeargle slim-mode sis shell-pop scss-mode sass-mode rjsx-mode restart-emacs rainbow-delimiters quickrun pytest pyim pyenv-mode py-isort pug-mode protobuf-mode prettier-js powershell popwin poetry plantuml-mode pippel pipenv pip-requirements pcre2el password-generator paradox pangu-spacing ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink open-junk-file omnisharp npm-mode nose nodejs-repl nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc magit-section macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-java lorem-ipsum livid-mode live-py-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide importmagic impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag groovy-mode groovy-imports graphviz-dot-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flx-ido find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotnet dotenv-mode disaster dired-quick-sort diminish define-word cython-mode cpp-auto-include company-ycmd company-web company-rtags company-c-headers company-anaconda column-enforce-mode clean-aindent-mode chinese-conv centered-cursor-mode ccls browse-at-remote bmx-mode blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-pinyin ace-link ace-jump-helm-line ac-ispell))
  '(safe-local-variable-values
    '((org-image-actual-width . 10)
      (org-image-actual-width . 100)
