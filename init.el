@@ -60,13 +60,14 @@ This function should only modify configuration layer settings."
           org-enable-hugo-support t
           org-want-todo-bindings t
           org-enable-valign t
+          org-enable-sticky-header t
           org-enable-asciidoc-support t
           org-enable-org-journal-support t)
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell)
-     spell-checking
+     ;; spell-checking
      syntax-checking
      version-control
      ;; treemacs
@@ -669,8 +670,7 @@ before packages are loaded."
                                 "xelatex -interaction nonstopmode %f"))
   ;; ---------------------------------------------------------------------------
 
-  ;; spell check dictionary
-  (ispell-change-dictionary "american" t)
+  ;; I'm now using hunspell
 
   ;; remove semantic at emacs-lisp mode to fix freeze
   ;; (remove-hook 'emacs-lisp-mode-hook 'semantic-mode)
@@ -687,11 +687,6 @@ before packages are loaded."
 
   ;; show tab and white space as character
   (spacemacs/toggle-whitespace-globally-on)
-
-  ;; pyim default dictionary
-  ;; (setq pyim-dicts
-  ;;       (quote
-  ;;        ((:name "default" :file "~/.spacemacs.d/tools/pyim-bigdict.pyim.gz"))))
 
   ;; Auto Switch input method in Mac
   (use-package sis
