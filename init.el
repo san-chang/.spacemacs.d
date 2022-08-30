@@ -32,7 +32,8 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(rust
+   '(
+     ;; rust
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -67,7 +68,7 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell)
-     ;; spell-checking
+     spell-checking
      syntax-checking
      version-control
      ;; treemacs
@@ -85,27 +86,27 @@ This function should only modify configuration layer settings."
      pdf
 
      ;; --------------- Additional language support ----------------------------
-     react
-     dotnet
-     csharp
+     ;; react
+     ;; dotnet
+     ;; csharp
      chinese
-     protobuf
-     javascript
-     yaml
-     windows-scripts
-     html
-     (java :variables java-backend 'lsp)
-     (python :variables python-backend 'lsp)
+     ;; protobuf
+     ;; javascript
+     ;; yaml
+     ;; windows-scripts
+     ;; html
+     ;; (java :variables java-backend 'lsp)
+     ;; (python :variables python-backend 'lsp)
      ;; ycmd
      ;; (c-c++ :variables
      ;;        c-c++-backend 'lsp-cquery
      ;;        c-c++-lsp-executable (file-truename "~/cquery/build/release/bin/cquery"))
-     c-c++
+     ;; c-c++
      imenu-list
      ;; dap
      ;; gtags
      ;; for functions in python lisp and c / c++
-     semantic
+     ;; semantic
      )
 
    ;; List of additional packages that will be installed without being wrapped
@@ -727,7 +728,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
-   '(cargo counsel-gtags counsel swiper ivy flycheck-rust ggtags helm-gtags racer ron-mode rust-mode toml-mode mwim unfill alect-themes pdf-view-restore pdf-tools tablist yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit stickyfunc-enhance srefactor sphinx-doc spaceline-all-the-icons smeargle slim-mode sis shell-pop scss-mode sass-mode rjsx-mode restart-emacs rainbow-delimiters quickrun pytest pyim pyenv-mode py-isort pug-mode protobuf-mode prettier-js powershell popwin poetry plantuml-mode pippel pipenv pip-requirements pcre2el password-generator paradox pangu-spacing ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink open-junk-file omnisharp npm-mode nose nodejs-repl nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc magit-section macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-java lorem-ipsum livid-mode live-py-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide importmagic impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag groovy-mode groovy-imports graphviz-dot-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flx-ido find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotnet dotenv-mode disaster dired-quick-sort diminish define-word cython-mode cpp-auto-include company-ycmd company-web company-rtags company-c-headers company-anaconda column-enforce-mode clean-aindent-mode chinese-conv centered-cursor-mode ccls browse-at-remote bmx-mode blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-pinyin ace-link ace-jump-helm-line ac-ispell))
+   '(cargo counsel-gtags counsel swiper ivy flycheck-rust ggtags helm-gtags racer ron-mode rust-mode toml-mode mwim unfill alect-themes pdf-view-restore pdf-tools tablist yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toc-org terminal-here tagedit symon symbol-overlay string-inflection string-edit stickyfunc-enhance srefactor sphinx-doc spaceline-all-the-icons smeargle slim-mode sis shell-pop scss-mode sass-mode rjsx-mode restart-emacs rainbow-delimiters quickrun pytest pyenv-mode py-isort pug-mode protobuf-mode prettier-js powershell popwin poetry plantuml-mode pippel pipenv pip-requirements pcre2el password-generator paradox pangu-spacing ox-twbs ox-gfm overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-cliplink open-junk-file omnisharp npm-mode nose nodejs-repl nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc magit-section macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-java lorem-ipsum livid-mode live-py-mode link-hint json-navigator json-mode js2-refactor js-doc indent-guide importmagic impatient-mode hybrid-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gitignore helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag groovy-mode groovy-imports graphviz-dot-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ gh-md fuzzy font-lock+ flyspell-correct-helm flycheck-ycmd flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flx-ido find-by-pinyin-dired fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav editorconfig dumb-jump drag-stuff dotnet dotenv-mode disaster dired-quick-sort diminish define-word cython-mode cpp-auto-include company-ycmd company-web company-rtags company-c-headers company-anaconda column-enforce-mode clean-aindent-mode chinese-conv centered-cursor-mode ccls browse-at-remote bmx-mode blacken auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent ace-pinyin ace-link ace-jump-helm-line ac-ispell))
  '(safe-local-variable-values
    '((org-image-actual-width . 10)
      (org-image-actual-width . 100)
