@@ -87,21 +87,22 @@ This function should only modify configuration layer settings."
 
      ;; --------------- Additional language support ----------------------------
      ;; react
-     ;; dotnet
-     ;; csharp
+     dotnet
+     csharp
+     json
      chinese
      ;; protobuf
-     ;; javascript
+     javascript
      ;; yaml
      ;; windows-scripts
      ;; html
      ;; (java :variables java-backend 'lsp)
-     ;; (python :variables python-backend 'lsp)
+     (python :variables python-backend 'lsp)
      ;; ycmd
-     ;; (c-c++ :variables
-     ;;        c-c++-backend 'lsp-cquery
-     ;;        c-c++-lsp-executable (file-truename "~/cquery/build/release/bin/cquery"))
-     ;; c-c++
+     (c-c++ :variables
+            c-c++-backend 'lsp-cquery
+            c-c++-lsp-executable (file-truename "~/cquery/build/release/bin/cquery"))
+     c-c++
      imenu-list
      ;; dap
      ;; gtags
@@ -225,7 +226,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil show the version string in the Spacemacs buffer. It will
    ;; appear as (spacemacs version)@(emacs version)
    ;; (default t)
-   dotspacemacs-startup-buffer-show-version t
+   dotspacemacs-startup-buffer-show-version nil
 
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
@@ -233,7 +234,7 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
 
    ;; Scale factor controls the scaling (size) of the startup banner. Default
    ;; value is `auto' for scaling the logo automatically to fit all buffer
@@ -252,8 +253,10 @@ It should only modify the values of Spacemacs settings."
    ;; pair of numbers, e.g. `(recents-by-project . (7 .  5))', where the first
    ;; number is the project limit and the second the limit on the recent files
    ;; within a project.
-   dotspacemacs-startup-lists '((recents . 5)
-                                (projects . 7))
+   dotspacemacs-startup-lists '((recents . 10)
+                                (projects . 7)
+                                (agenda . 5)
+                                (todos . 20))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
@@ -581,10 +584,10 @@ It should only modify the values of Spacemacs settings."
 
    ;; If nil the home buffer shows the full path of agenda items
    ;; and todos. If non-nil only the file name is shown.
-   dotspacemacs-home-shorten-agenda-source nil
+   dotspacemacs-home-shorten-agenda-source t
 
    ;; If non-nil then byte-compile some of Spacemacs files.
-   dotspacemacs-byte-compile nil))
+   dotspacemacs-byte-compile t))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -610,7 +613,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     (org-babel-do-load-languages 'org-babel-load-languages '(
                                                              (dot . t)
                                                              (plantuml . t)
-                                                             ;; (python . t)
+                                                             (python . t)
                                                              ))
     (setq org-confirm-babel-evaluate nil)
     ;; org-table align for Chinese and English characters
@@ -661,7 +664,10 @@ before packages are loaded."
   ;; ------------------------ Org Mode Configuration ---------------------------
   ;; agenda file or dictionary
   (setq org-agenda-files (quote
-                          ("~/org" "~/org/jorunal" "~/org/project/")))
+                          (
+                           "~/org" "~/org/jorunal"
+                           "~/org/project/"
+                           "~/Project/abb_motion/openservice/is.motion.abb.com.cn/content-org/projects/mdm/")))
 
   ;; set org-journal directory
   (setq org-journal-dir "~/org/journal/")
@@ -671,6 +677,7 @@ before packages are loaded."
                                 "xelatex -interaction nonstopmode %f"))
   ;; ---------------------------------------------------------------------------
 
+  (require 'ox-taskjuggler)
   ;; I'm now using hunspell
 
   ;; remove semantic at emacs-lisp mode to fix freeze
