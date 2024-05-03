@@ -315,7 +315,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
 
-   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; Default font or prioritized list of fonts. This setting has no effect when
+   ;; running Emacs in terminal. The font set here will be used for default and
+   ;; fixed-pitch faces. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
@@ -396,6 +398,10 @@ It should only modify the values of Spacemacs settings."
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
+   ;; It is also possible to use a posframe with the following cons cell
+   ;; `(posframe . position)' where position can be one of `center',
+   ;; `top-center', `bottom-center', `top-left-corner', `top-right-corner',
+   ;; `top-right-corner', `bottom-left-corner' or `bottom-right-corner'
    ;; (default 'bottom)
    dotspacemacs-which-key-position 'right-then-bottom
 
@@ -421,7 +427,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
-   ;; (default nil) (Emacs 24.4+ only)
+   ;; (default t) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup nil
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
@@ -596,7 +602,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-home-shorten-agenda-source t
 
    ;; If non-nil then byte-compile some of Spacemacs files.
-   dotspacemacs-byte-compile t))
+   dotspacemacs-byte-compile nil))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -674,12 +680,13 @@ before packages are loaded."
   ;; agenda file or dictionary
   (setq org-agenda-files (quote
                           (
-                           "~/org" "~/org/journal"
+                           "~/org" "~/org/journals/"
                            "~/org/project/"
                            )))
 
   ;; set org-journal directory
-  (setq org-journal-dir "~/org/journal/")
+  (setq org-journal-dir "~/org/journals/")
+  (setq org-journal-file-format "%Y_%m_%d.org")
 
   ;; set xelatex as latex compiler for better support of Chinese
   (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
@@ -699,7 +706,6 @@ before packages are loaded."
   (add-hook 'prog-mode-hook 'copilot-mode)
 
   (require 'ox-taskjuggler)
-  ;; I'm now using hunspell
 
   ;; remove semantic at emacs-lisp mode to fix freeze
   ;; (remove-hook 'emacs-lisp-mode-hook 'semantic-mode)
@@ -744,3 +750,9 @@ before packages are loaded."
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+)
