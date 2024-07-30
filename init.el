@@ -53,10 +53,10 @@ This function should only modify configuration layer settings."
      better-defaults
      emacs-lisp
      git
-     helm
-     lsp
-     markdown
-     multiple-cursors
+     ;; helm
+     ;; lsp
+     ;; markdown
+     ;; multiple-cursors
      (org :variables
           org-enable-hugo-support t
           org-want-todo-bindings t
@@ -68,9 +68,9 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell)
-     spell-checking
-     syntax-checking
-     version-control
+     ;; spell-checking
+     ;; syntax-checking
+     ;; version-control
      ;; treemacs
 
 
@@ -83,26 +83,26 @@ This function should only modify configuration layer settings."
      ;; ------------------------------------------------------------------------
 
      ;; --------------- Additional layers --------------------------------------
-     pdf
+     ;; pdf
 
      ;; --------------- Additional language support ----------------------------
      ;; react
-     dotnet
-     csharp
-     json
+     ;; dotnet
+     ;; csharp
+     ;; json
      chinese
      ;; protobuf
-     javascript
+     ;; javascript
      ;; yaml
      ;; windows-scripts
      ;; html
      ;; (java :variables java-backend 'lsp)
-     (python :variables python-backend 'lsp)
+     ;; (python :variables python-backend 'lsp)
      ;; ycmd
-     (c-c++ :variables
-            c-c++-backend 'lsp-cquery
-            c-c++-lsp-executable (file-truename "~/cquery/build/release/bin/cquery"))
-     c-c++
+     ;; (c-c++ :variables
+     ;;        c-c++-backend 'lsp-cquery
+     ;;        c-c++-lsp-executable (file-truename "~/cquery/build/release/bin/cquery"))
+     ;; c-c++
      imenu-list
      ;; dap
      ;; gtags
@@ -735,8 +735,8 @@ before packages are loaded."
 
      ;; Other language input source: "rime", "sogou" or another one.
      ;; "im.rime.inputmethod.Squirrel.Rime"
-     ;; "com.sogou.inputmethod.sogou.pinyin")
-     "com.apple.inputmethod.SCIM.ITABC")
+     "com.sogou.inputmethod.sogou.pinyin")
+     ;; "com.apple.inputmethod.SCIM.ITABC")
 
     ;; enable the /cursor color/ mode
     (sis-global-cursor-color-mode t)
