@@ -1,5 +1,7 @@
 # this project is for my [spacemacs](http://spacemacs.org/) configuration
 
+![Visualization of the codebase](./diagram.svg)
+
 ## how to use
 	git clone https://github.com/idears-studio/.spacemacs.d.git ~/.spacemacs.d
 and remove your ~/.spacemacs files, **don't forget to make a backup**
