@@ -50,28 +50,35 @@ This function should only modify configuration layer settings."
                       ;; auto-completion-complete-with-key-sequence-delay 0.1
                       ;; auto-completion-private-snippets-directory nil
                       )
-     better-defaults
+     ;; better-defaults
      emacs-lisp
-     git
-     ;; helm
+     ;; git
+     helm
      ;; lsp
      ;; markdown
-     ;; multiple-cursors
+     multiple-cursors
+
      (org :variables
           org-enable-hugo-support t
           org-want-todo-bindings t
           org-enable-valign t
           org-enable-sticky-header t
           org-enable-asciidoc-support t
-          org-enable-org-journal-support t)
+
+          ;; org journal support, see:
+          ;; https://develop.spacemacs.org/layers/+emacs/org/README.html#org-journal-support
+          org-enable-org-journal-support t
+          org-journal-dir "~/org/journals/"
+          org-journal-file-format "%Y_%m_%d.org")
+
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom
             shell-default-shell 'eshell)
-     ;; spell-checking
+     spell-checking
      ;; syntax-checking
      ;; version-control
-     ;; treemacs
+     treemacs
 
 
      ;; --------------- digraph for orgmode ------------------------------------
@@ -90,7 +97,7 @@ This function should only modify configuration layer settings."
      ;; dotnet
      ;; csharp
      ;; json
-     chinese
+     ;; chinese
      ;; protobuf
      ;; javascript
      ;; yaml
@@ -103,11 +110,13 @@ This function should only modify configuration layer settings."
      ;;        c-c++-backend 'lsp-cquery
      ;;        c-c++-lsp-executable (file-truename "~/cquery/build/release/bin/cquery"))
      ;; c-c++
-     imenu-list
+     ;; imenu-list
      ;; dap
      ;; gtags
      ;; for functions in python lisp and c / c++
      ;; semantic
+
+     github-copilot
      )
 
    ;; List of additional packages that will be installed without being wrapped
@@ -120,10 +129,6 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       sis
-                                      (copilot :location (recipe
-                                                          :fetcher github
-                                                          :repo "zerolfx/copilot.el"
-                                                          :files ("*.el" "dist")))
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -172,17 +177,9 @@ It should only modify the values of Spacemacs settings."
    ;; (default (format "spacemacs-%s.pdmp" emacs-version))
    dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
 
-   ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
-   ;; possible. Set it to nil if you have no way to use HTTPS in your
-   ;; environment, otherwise it is strongly recommended to let it set to t.
-   ;; This variable has no effect if Emacs is launched with the parameter
-   ;; `--insecure' which forces the value of this variable to nil.
-   ;; (default t)
-   dotspacemacs-elpa-https nil
-
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
-   dotspacemacs-elpa-timeout 5
+   dotspacemacs-elpa-timeout 100
 
    ;; Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
    ;; This is an advanced option and should not be changed unless you suspect
@@ -298,7 +295,10 @@ It should only modify the values of Spacemacs settings."
 
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
-   ;; with 2 themes variants, one dark and one light)
+   ;; with 2 themes variants, one dark and one light). A theme from external
+   ;; package can be defined with `:package', or a theme can be defined with
+   ;; `:location' to download the theme package, refer the themes section in
+   ;; DOCUMENTATION.org for the full theme specifications.
    dotspacemacs-themes '(spacemacs-dark
                          spacemacs-light)
 
@@ -403,7 +403,7 @@ It should only modify the values of Spacemacs settings."
    ;; `top-center', `bottom-center', `top-left-corner', `top-right-corner',
    ;; `top-right-corner', `bottom-left-corner' or `bottom-right-corner'
    ;; (default 'bottom)
-   dotspacemacs-which-key-position 'right-then-bottom
+   dotspacemacs-which-key-position 'bottom
 
    ;; Control where `switch-to-buffer' displays the buffer. If nil,
    ;; `switch-to-buffer' displays the buffer in the current window even if
@@ -411,6 +411,22 @@ It should only modify the values of Spacemacs settings."
    ;; displays the buffer in a same-purpose window even if the buffer can be
    ;; displayed in the current window. (default nil)
    dotspacemacs-switch-to-buffer-prefers-purpose nil
+
+   ;; Whether side windows (such as those created by treemacs or neotree)
+   ;; are kept or minimized by `spacemacs/toggle-maximize-window' (SPC w m).
+   ;; (default t)
+   dotspacemacs-maximize-window-keep-side-windows t
+
+   ;; If nil, no load-hints enabled. If t, enable the `load-hints' which will
+   ;; put the most likely path on the top of `load-path' to reduce walking
+   ;; through the whole `load-path'. It's an experimental feature to speedup
+   ;; Spacemacs on Windows. Refer the FAQ.org "load-hints" session for details.
+   dotspacemacs-enable-load-hints nil
+
+   ;; If t, enable the `package-quickstart' feature to avoid full package
+   ;; loading, otherwise no `package-quickstart' attemption (default nil).
+   ;; Refer the FAQ.org "package-quickstart" section for details.
+   dotspacemacs-enable-package-quickstart nil
 
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
@@ -533,6 +549,13 @@ It should only modify the values of Spacemacs settings."
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
    dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
+   ;; The backend used for undo/redo functionality. Possible values are
+   ;; `undo-fu', `undo-redo' and `undo-tree' see also `evil-undo-system'.
+   ;; Note that saved undo history does not get transferred when changing
+   ;; your undo system. The default is currently `undo-fu' as `undo-tree'
+   ;; is not maintained anymore and `undo-redo' is very basic."
+   dotspacemacs-undo-system 'undo-fu
+
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
    ;; %t - `projectile-project-name'
@@ -568,6 +591,9 @@ It should only modify the values of Spacemacs settings."
    ;; to aggressively delete empty line and long sequences of whitespace,
    ;; `trailing' to delete only the whitespace at end of lines, `changed' to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
+   ;; The variable `global-spacemacs-whitespace-cleanup-modes' controls
+   ;; which major modes have whitespace cleanup enabled or disabled
+   ;; by default.
    ;; (default nil)
    dotspacemacs-whitespace-cleanup 'trailing
 
@@ -611,7 +637,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -624,6 +650,40 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
   ;;         ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
   ;;         ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
+  ;; `flyspell-mode' also has to be disabled because depending on the
+  ;; theme, the squiggly underlines can either show up in the html file
+  ;; or cause elisp errors like:
+  ;; (wrong-type-argument number-or-marker-p (nil . 100))
+  ;; (with-eval-after-load 'flyspell
+  ;;   (defvar modi/htmlize-initial-flyspell-state nil
+  ;;     "Variable to store the state of `flyspell-mode' when `htmlize-buffer' is called.")
+  ;;   (defun modi/htmlize-before-hook-flyspell-disable ()
+  ;;     (setq modi/htmlize-initial-flyspell-state flyspell-mode)
+  ;;     (when flyspell-mode
+  ;;       (flyspell-mode -1)))
+  ;;   (defun modi/htmlize-after-hook-flyspell-enable-maybe ()
+  ;;     (when modi/htmlize-initial-flyspell-state
+  ;;       (flyspell-mode 1)))
+  ;;   (add-hook 'htmlize-before-hook #'modi/htmlize-before-hook-flyspell-disable)
+  ;;   (add-hook 'htmlize-after-hook #'modi/htmlize-after-hook-flyspell-enable-maybe))
+  )
+
+
+(defun dotspacemacs/user-load ()
+  "Library to load while dumping.
+This function is called only while dumping Spacemacs configuration. You can
+`require' or `load' the libraries of your choice that will be included in the
+dump."
+  )
+
+
+(defun dotspacemacs/user-config ()
+  "Configuration for user code:
+This function is called at the very end of Spacemacs startup, after layer
+configuration.
+Put your configuration code here, except for variables that should be set
+before packages are loaded."
+  ;; ------------------------ Org Mode Configuration ---------------------------
   (with-eval-after-load 'org
     (org-babel-do-load-languages 'org-babel-load-languages '(
                                                              (dot . t)
@@ -643,40 +703,6 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     ;;  13
     ;;  16)
     )
-
-   ;; `flyspell-mode' also has to be disabled because depending on the
-  ;; theme, the squiggly underlines can either show up in the html file
-  ;; or cause elisp errors like:
-    ;; (wrong-type-argument number-or-marker-p (nil . 100))
-  ;; (with-eval-after-load 'flyspell
-  ;;   (defvar modi/htmlize-initial-flyspell-state nil
-  ;;     "Variable to store the state of `flyspell-mode' when `htmlize-buffer' is called.")
-  ;;   (defun modi/htmlize-before-hook-flyspell-disable ()
-  ;;     (setq modi/htmlize-initial-flyspell-state flyspell-mode)
-  ;;     (when flyspell-mode
-  ;;       (flyspell-mode -1)))
-  ;;   (defun modi/htmlize-after-hook-flyspell-enable-maybe ()
-  ;;     (when modi/htmlize-initial-flyspell-state
-  ;;       (flyspell-mode 1)))
-  ;;   (add-hook 'htmlize-before-hook #'modi/htmlize-before-hook-flyspell-disable)
-  ;;   (add-hook 'htmlize-after-hook #'modi/htmlize-after-hook-flyspell-enable-maybe))
-  )
-
-(defun dotspacemacs/user-load ()
-  "Library to load while dumping.
-This function is called only while dumping Spacemacs configuration. You can
-`require' or `load' the libraries of your choice that will be included in the
-dump."
-)
-
-
-(defun dotspacemacs/user-config ()
-  "Configuration for user code:
-This function is called at the very end of Spacemacs startup, after layer
-configuration.
-Put your configuration code here, except for variables that should be set
-before packages are loaded."
-  ;; ------------------------ Org Mode Configuration ---------------------------
   ;; agenda file or dictionary
   (setq org-agenda-files (quote
                           (
@@ -684,15 +710,14 @@ before packages are loaded."
                            "~/org/project/"
                            )))
 
-  ;; set org-journal directory
-  (setq org-journal-dir "~/org/journals/")
-  (setq org-journal-file-format "%Y_%m_%d.org")
-
   ;; set xelatex as latex compiler for better support of Chinese
   (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
                                 "xelatex -interaction nonstopmode %f"))
   ;; ---------------------------------------------------------------------------
 
+  ;; ----------------------- for copilot ---------------------------------------
+
+  ;; accept completion from copilot and fallback to company
   (with-eval-after-load 'company
     ;; disable inline previews
     (delq 'company-preview-if-just-one-frontend company-frontends))
@@ -700,12 +725,21 @@ before packages are loaded."
   (with-eval-after-load 'copilot
     (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
     (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+    ;; switch between the copilot completions by using C-J and C-K
+    (define-key copilot-completion-map (kbd "C-j") 'copilot-next-completion)
+    (define-key copilot-completion-map (kbd "C-k") 'copilot-previous-completion)
     (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
     (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word))
 
   (add-hook 'prog-mode-hook 'copilot-mode)
+  ;; add hook to enable copilot in org mode as well
+  (add-hook 'org-mode-hook 'copilot-mode)
 
-  (require 'ox-taskjuggler)
+  ;; reduce the warning buffer
+  (add-to-list 'copilot-indentation-alist '(org-mode 2))
+  (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))
+
+  ;; ----------------------- for copilot end -----------------------------------
 
   ;; remove semantic at emacs-lisp mode to fix freeze
   ;; (remove-hook 'emacs-lisp-mode-hook 'semantic-mode)
@@ -736,7 +770,7 @@ before packages are loaded."
      ;; Other language input source: "rime", "sogou" or another one.
      ;; "im.rime.inputmethod.Squirrel.Rime"
      "com.sogou.inputmethod.sogou.pinyin")
-     ;; "com.apple.inputmethod.SCIM.ITABC")
+    ;; "com.apple.inputmethod.SCIM.ITABC")
 
     ;; enable the /cursor color/ mode
     (sis-global-cursor-color-mode t)
@@ -746,8 +780,8 @@ before packages are loaded."
     (sis-global-context-mode t)
     ;; enable the /inline english/ mode for all buffers
     ;; (sis-global-inline-mode t)
-    )
-  )
+    ))
+
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -756,4 +790,17 @@ before packages are loaded."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-)
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(package-selected-packages
+     '(ox-hugo sis undo-fu undo-fu-session vundo yasnippet-snippets ws-butler writeroom-mode winum which-key wgrep volatile-highlights vim-powerline vi-tilde-fringe valign uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org terminal-here term-cursor symon symbol-overlay string-inflection string-edit-at-point spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc shell-pop restart-emacs request rainbow-delimiters quickrun popwin plantuml-mode pcre2el password-generator paradox ox-asciidoc overseer org-superstar org-sticky-header org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file nameless multi-vterm multi-term multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete htmlize holy-mode hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-descbinds helm-company helm-comint helm-c-yasnippet helm-ag graphviz-dot-mode google-translate golden-ratio gnuplot flyspell-correct-helm flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr elisp-slime-nav elisp-demos elisp-def editorconfig eat dumb-jump drag-stuff dotenv-mode disable-mouse dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile all-the-icons aggressive-indent ace-link ace-jump-helm-line)))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+  )
