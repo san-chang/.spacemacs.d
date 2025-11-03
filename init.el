@@ -116,7 +116,10 @@ This function should only modify configuration layer settings."
      ;; for functions in python lisp and c / c++
      ;; semantic
 
+     mermaid
+
      github-copilot
+
      )
 
    ;; List of additional packages that will be installed without being wrapped
@@ -154,29 +157,6 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; If non-nil then enable support for the portable dumper. You'll need to
-   ;; compile Emacs 27 from source following the instructions in file
-   ;; EXPERIMENTAL.org at to root of the git repository.
-   ;;
-   ;; WARNING: pdumper does not work with Native Compilation, so it's disabled
-   ;; regardless of the following setting when native compilation is in effect.
-   ;;
-   ;; (default nil)
-   dotspacemacs-enable-emacs-pdumper nil
-
-   ;; Name of executable file pointing to emacs 27+. This executable must be
-   ;; in your PATH.
-   ;; (default "emacs")
-   dotspacemacs-emacs-pdumper-executable-file "emacs"
-
-   ;; Name of the Spacemacs dump file. This is the file will be created by the
-   ;; portable dumper in the cache directory under dumps sub-directory.
-   ;; To load it when starting Emacs add the parameter `--dump-file'
-   ;; when invoking Emacs 27.1 executable on the command line, for instance:
-   ;;   ./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp
-   ;; (default (format "spacemacs-%s.pdmp" emacs-version))
-   dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
-
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    ;; (default 5)
    dotspacemacs-elpa-timeout 100
@@ -269,7 +249,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-startup-buffer-multi-digit-delay 0.4
 
    ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
-   ;; This has no effect in terminal or if "all-the-icons" package or the font
+   ;; This has no effect in terminal or if "nerd-icons" package or the font
    ;; is not installed. (default nil)
    dotspacemacs-startup-buffer-show-icons nil
 
@@ -325,6 +305,9 @@ It should only modify the values of Spacemacs settings."
                                :weight normal
                                :width normal)
 
+   ;; Default icons font, it can be `all-the-icons' or `nerd-icons'.
+   dotspacemacs-default-icons-font 'all-the-icons
+
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
 
@@ -344,10 +327,10 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-major-mode-leader-key ","
 
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
-   ;; (default "C-M-m" for terminal mode, "<M-return>" for GUI mode).
+   ;; (default "C-M-m" for terminal mode, "M-<return>" for GUI mode).
    ;; Thus M-RET should work as leader key in both GUI and terminal modes.
    ;; C-M-m also should work in terminal mode, but not in GUI mode.
-   dotspacemacs-major-mode-emacs-leader-key (if window-system "<M-return>" "C-M-m")
+   dotspacemacs-major-mode-emacs-leader-key (if window-system "M-<return>" "C-M-m")
 
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs `C-i', `TAB' and `C-m', `RET'.
@@ -411,6 +394,14 @@ It should only modify the values of Spacemacs settings."
    ;; displays the buffer in a same-purpose window even if the buffer can be
    ;; displayed in the current window. (default nil)
    dotspacemacs-switch-to-buffer-prefers-purpose nil
+
+   ;; Make consecutive tab key presses after commands such as
+   ;; `spacemacs/alternate-buffer' (SPC TAB) cycle through previous
+   ;; buffers/windows/etc. Please see the option's docstring for more information.
+   ;; Set the option to t in order to enable cycling for all current and
+   ;; future cycling commands. Alternatively, choose a subset of the currently
+   ;; supported commands: '(alternate-buffer alternate-window). (default nil)
+   dotspacemacs-enable-cycling nil
 
    ;; Whether side windows (such as those created by treemacs or neotree)
    ;; are kept or minimized by `spacemacs/toggle-maximize-window' (SPC w m).
@@ -545,16 +536,15 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-persistent-server nil
 
    ;; List of search tool executable names. Spacemacs uses the first installed
-   ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
-   ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   ;; tool of the list. Supported tools are `rg', `ag', `ack' and `grep'.
+   ;; (default '("rg" "ag" "ack" "grep"))
+   dotspacemacs-search-tools '("rg" "ag" "ack" "grep")
 
    ;; The backend used for undo/redo functionality. Possible values are
-   ;; `undo-fu', `undo-redo' and `undo-tree' see also `evil-undo-system'.
+   ;; `undo-redo', `undo-fu' and `undo-tree' see also `evil-undo-system'.
    ;; Note that saved undo history does not get transferred when changing
-   ;; your undo system. The default is currently `undo-fu' as `undo-tree'
-   ;; is not maintained anymore and `undo-redo' is very basic."
-   dotspacemacs-undo-system 'undo-fu
+   ;; your undo system from or to undo-tree. (default `undo-redo')"
+   dotspacemacs-undo-system 'undo-redo
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -645,10 +635,10 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  ;; (setq configuration-layer-elpa-archives
-  ;;       '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
-  ;;         ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
-  ;;         ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+  (setq configuration-layer-elpa-archives
+        '(("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
+          ("org"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
+          ("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
 
   ;; `flyspell-mode' also has to be disabled because depending on the
   ;; theme, the squiggly underlines can either show up in the html file
@@ -683,23 +673,30 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  (savehist-mode -1)
   ;; ------------------------ Org Mode Configuration ---------------------------
   (with-eval-after-load 'org
     (org-babel-do-load-languages 'org-babel-load-languages '(
                                                              (dot . t)
                                                              (plantuml . t)
                                                              (python . t)
+                                                             (shell . t)
+                                                             (mermaid . t)
+                                                             (gnuplot .t)
                                                              ))
     (setq org-confirm-babel-evaluate nil)
     ;; org-table align for Chinese and English characters
     (setq org-adapt-indentation t)
     ;; inline image preview width
     (setq org-image-actual-width 400)
+    (setq org-duration-format (quote h:mm))
+    (setq fill-column 80)
+    (setq org-babel-python-command "python3")
 
     ;; Spacemacs now have built-in support for table alignment
     ;; (spacemacs//set-monospaced-font
     ;;  "Source Code Pro"
-    ;;  "Source Han Sans CN"
+    ;;  "Alibaba PuHuiTi 3.0"
     ;;  13
     ;;  16)
     )
@@ -710,8 +707,11 @@ before packages are loaded."
                            "~/org/project/"
                            )))
 
+  (setq ob-mermaid-cli-path "mmdc")
+
   ;; set xelatex as latex compiler for better support of Chinese
   (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
+                                "xelatex -interaction nonstopmode %f"
                                 "xelatex -interaction nonstopmode %f"))
   ;; ---------------------------------------------------------------------------
 
@@ -721,6 +721,9 @@ before packages are loaded."
   (with-eval-after-load 'company
     ;; disable inline previews
     (delq 'company-preview-if-just-one-frontend company-frontends))
+
+  ;; disable copilot indent offset warning
+  (setq copilot-indent-offset-warning-disable t)
 
   (with-eval-after-load 'copilot
     (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
@@ -735,9 +738,9 @@ before packages are loaded."
   ;; add hook to enable copilot in org mode as well
   (add-hook 'org-mode-hook 'copilot-mode)
 
-  ;; reduce the warning buffer
-  (add-to-list 'copilot-indentation-alist '(org-mode 2))
-  (add-to-list 'copilot-indentation-alist '(emacs-lisp-mode 2))
+  ;; enable wakatime mode globally so I can track all my time spends inside \
+  ;; emacs
+  ;; (add-hook 'text-mode-hook 'wakatime-mode)
 
   ;; ----------------------- for copilot end -----------------------------------
 
@@ -769,8 +772,8 @@ before packages are loaded."
 
      ;; Other language input source: "rime", "sogou" or another one.
      ;; "im.rime.inputmethod.Squirrel.Rime"
-     "com.sogou.inputmethod.sogou.pinyin")
-    ;; "com.apple.inputmethod.SCIM.ITABC")
+     ;; "com.sogou.inputmethod.sogou.pinyin")
+     "com.apple.inputmethod.SCIM.ITABC")
 
     ;; enable the /cursor color/ mode
     (sis-global-cursor-color-mode t)
@@ -795,8 +798,11 @@ This function is called at the very end of Spacemacs initialization."
    ;; If you edit it by hand, you could mess it up, so be careful.
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
+   '(org-agenda-files
+     '("~/Project/abb_motion/openservice/is.motion.abb.com.cn/content-org/projects/msp/doc.org" "/Users/san/org/notes.org" "/Users/san/org/notes.org_archive.org" "/Users/san/org/orgdown.org" "/Users/san/org/journals/2023_05_29.org" "/Users/san/org/journals/2023_05_30.org" "/Users/san/org/journals/2023_05_31.org" "/Users/san/org/journals/2023_06_04.org" "/Users/san/org/journals/2023_06_05.org" "/Users/san/org/journals/2023_06_06.org" "/Users/san/org/journals/2023_06_08.org" "/Users/san/org/journals/2023_06_09.org" "/Users/san/org/journals/2023_06_10.org" "/Users/san/org/journals/2023_06_11.org" "/Users/san/org/journals/2023_06_12.org" "/Users/san/org/journals/2023_06_13.org" "/Users/san/org/journals/2023_06_14.org" "/Users/san/org/journals/2023_06_15.org" "/Users/san/org/journals/2023_06_16.org" "/Users/san/org/journals/2023_06_25.org" "/Users/san/org/journals/2023_06_26.org" "/Users/san/org/journals/2023_06_27.org" "/Users/san/org/journals/2023_06_30.org" "/Users/san/org/journals/2023_07_01.org" "/Users/san/org/journals/2023_07_03.org" "/Users/san/org/journals/2023_07_12.org" "/Users/san/org/journals/2023_07_18.org" "/Users/san/org/journals/2023_07_20.org" "/Users/san/org/journals/2023_07_25.org" "/Users/san/org/journals/2023_08_11.org" "/Users/san/org/journals/2023_08_24.org" "/Users/san/org/journals/2023_08_26.org" "/Users/san/org/journals/2023_08_27.org" "/Users/san/org/journals/2023_08_31.org" "/Users/san/org/journals/2023_09_11.org" "/Users/san/org/journals/2023_09_18.org" "/Users/san/org/journals/2023_09_22.org" "/Users/san/org/journals/2023_10_02.org" "/Users/san/org/journals/2023_10_06.org" "/Users/san/org/journals/2023_10_07.org" "/Users/san/org/journals/2023_10_13.org" "/Users/san/org/journals/2023_10_22.org" "/Users/san/org/journals/2023_11_06.org" "/Users/san/org/journals/2023_11_09.org" "/Users/san/org/journals/2023_12_01.org" "/Users/san/org/journals/2023_12_15.org" "/Users/san/org/journals/2024_01_03.org" "/Users/san/org/journals/2024_05_18.org" "/Users/san/org/journals/2024_07_24.org" "/Users/san/org/journals/2024_07_30.org" "/Users/san/org/journals/2024_08_02.org" "/Users/san/org/journals/2024_08_03.org" "/Users/san/org/journals/2024_08_05.org" "/Users/san/org/journals/2024_08_06.org" "/Users/san/org/journals/2024_08_07.org" "/Users/san/org/journals/2024_08_08.org" "/Users/san/org/journals/2024_08_09.org" "/Users/san/org/journals/2024_08_11.org" "/Users/san/org/journals/2024_08_30.org" "/Users/san/org/journals/2024_08_31.org" "/Users/san/org/journals/2024_12_15.org" "/Users/san/org/journals/2024_12_17.org" "/Users/san/org/journals/2024_12_21.org" "/Users/san/org/project/org-mode.org"))
    '(package-selected-packages
-     '(ox-hugo sis undo-fu undo-fu-session vundo yasnippet-snippets ws-butler writeroom-mode winum which-key wgrep volatile-highlights vim-powerline vi-tilde-fringe valign uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org terminal-here term-cursor symon symbol-overlay string-inflection string-edit-at-point spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc shell-pop restart-emacs request rainbow-delimiters quickrun popwin plantuml-mode pcre2el password-generator paradox ox-asciidoc overseer org-superstar org-sticky-header org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file nameless multi-vterm multi-term multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete htmlize holy-mode hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-descbinds helm-company helm-comint helm-c-yasnippet helm-ag graphviz-dot-mode google-translate golden-ratio gnuplot flyspell-correct-helm flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr elisp-slime-nav elisp-demos elisp-def editorconfig eat dumb-jump drag-stuff dotenv-mode disable-mouse dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile all-the-icons aggressive-indent ace-link ace-jump-helm-line)))
+     '(mcp shell-maker markdown-mode polymode aio add-node-modules-path web-completion-data ivy emmet-mode flycheck helm-css-scss simple-httpd prettier-js pug-mode haml-mode scss-mode slim-mode tagedit web-beautify web-mode ox-hugo sis undo-fu undo-fu-session vundo yasnippet-snippets ws-butler writeroom-mode winum which-key wgrep volatile-highlights vim-powerline vi-tilde-fringe valign uuidgen undo-tree treemacs-projectile treemacs-persp treemacs-icons-dired treemacs-evil toc-org terminal-here term-cursor symon symbol-overlay string-inflection string-edit-at-point spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline space-doc shell-pop restart-emacs request rainbow-delimiters quickrun popwin plantuml-mode pcre2el password-generator paradox ox-asciidoc overseer org-superstar org-sticky-header org-rich-yank org-projectile org-present org-pomodoro org-mime org-journal org-download org-contrib org-cliplink open-junk-file nameless multi-vterm multi-term multi-line macrostep lorem-ipsum link-hint inspector info+ indent-guide hybrid-mode hungry-delete htmlize holy-mode hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helm-xref helm-themes helm-swoop helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-descbinds helm-company helm-comint helm-c-yasnippet helm-ag graphviz-dot-mode google-translate golden-ratio gnuplot flyspell-correct-helm flycheck-package flycheck-elsa flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-evilified-state evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help emr elisp-slime-nav elisp-demos elisp-def editorconfig eat dumb-jump drag-stuff dotenv-mode disable-mouse dired-quick-sort diminish devdocs define-word column-enforce-mode clean-aindent-mode centered-cursor-mode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile all-the-icons aggressive-indent ace-link ace-jump-helm-line))
+   '(warning-suppress-log-types '((ox-latex))))
   (custom-set-faces
    ;; custom-set-faces was added by Custom.
    ;; If you edit it by hand, you could mess it up, so be careful.
